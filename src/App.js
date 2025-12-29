@@ -318,7 +318,7 @@ const CardRevealGame = () => {
           <div style={styles.header}>
             <div style={styles.titleWrapper}>
               <Sparkles color="#6b7280" size={32} />
-              <h1 style={styles.title}>CARD REVEAL</h1>
+              <h1 style={styles.title}>Just Pick</h1>
               <Sparkles color="#6b7280" size={32} />
             </div>
             <p style={styles.subtitle}>Click the cards to reveal the hidden words!</p>
