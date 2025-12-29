@@ -344,7 +344,7 @@ const CardRevealGame = () => {
                           </div>
                         ) : (
                           <div style={styles.wordHidden}>
-                            {Array.from({ length: Math.min(word.length, 12) }).map((_, i) => (
+                            {Array.from({ length: 10 }).map((_, i) => (
                               <div
                                 key={i}
                                 style={{...styles.placeholderBar, animationDelay: `${i * 50}ms`}}
