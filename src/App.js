@@ -60,11 +60,14 @@ const CardRevealGame = () => {
   }, [getRandomCards]);
 
   const toggleReveal = (index) => {
+    // Only allow revealing, not hiding
+    if (revealed[index]) return;
+    
     setAnimatingCard(index);
     setTimeout(() => setAnimatingCard(null), 300);
     
     const newRevealed = [...revealed];
-    newRevealed[index] = !newRevealed[index];
+    newRevealed[index] = true;
     setRevealed(newRevealed);
   };
 
@@ -74,17 +77,17 @@ const CardRevealGame = () => {
   };
 
   const cardGradients = [
-    'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-    'linear-gradient(135deg, #a855f7 0%, #9333ea 100%)',
-    'linear-gradient(135deg, #ec4899 0%, #db2777 100%)',
-    'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
-    'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)'
+    'linear-gradient(135deg, #64748b 0%, #475569 100%)',
+    'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)',
+    'linear-gradient(135deg, #71717a 0%, #52525b 100%)',
+    'linear-gradient(135deg, #78716c 0%, #57534e 100%)',
+    'linear-gradient(135deg, #737373 0%, #525252 100%)'
   ];
 
   const styles = {
     container: {
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #1e1b4b 0%, #581c87 50%, #9d174d 100%)',
+      background: 'linear-gradient(135deg, #1f2937 0%, #374151 50%, #4b5563 100%)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -99,10 +102,10 @@ const CardRevealGame = () => {
       left: '80px',
       width: '300px',
       height: '300px',
-      background: '#a855f7',
+      background: '#6b7280',
       borderRadius: '50%',
       filter: 'blur(80px)',
-      opacity: 0.2,
+      opacity: 0.15,
       animation: 'pulse 4s ease-in-out infinite'
     },
     orb2: {
@@ -111,10 +114,10 @@ const CardRevealGame = () => {
       right: '80px',
       width: '300px',
       height: '300px',
-      background: '#ec4899',
+      background: '#9ca3af',
       borderRadius: '50%',
       filter: 'blur(80px)',
-      opacity: 0.2,
+      opacity: 0.15,
       animation: 'pulse 4s ease-in-out infinite 2s'
     },
     gameCard: {
@@ -142,7 +145,7 @@ const CardRevealGame = () => {
     title: {
       fontSize: '2.5rem',
       fontWeight: 900,
-      background: 'linear-gradient(90deg, #9333ea 0%, #ec4899 100%)',
+      background: 'linear-gradient(90deg, #374151 0%, #1f2937 100%)',
       WebkitBackgroundClip: 'text',
       WebkitTextFillColor: 'transparent',
       letterSpacing: '2px'
@@ -160,7 +163,6 @@ const CardRevealGame = () => {
     },
     cardItem: {
       position: 'relative',
-      cursor: 'pointer',
       transition: 'transform 0.3s ease'
     },
     cardGlow: {
@@ -242,7 +244,7 @@ const CardRevealGame = () => {
       alignItems: 'center',
       justifyContent: 'center',
       background: isRevealed ? '#d1fae5' : '#f3f4f6',
-      color: isRevealed ? '#059669' : '#9ca3af',
+      color: isRevealed ? '#059669' : '#6b7280',
       transition: 'all 0.3s ease'
     }),
     revealText: {
@@ -252,7 +254,7 @@ const CardRevealGame = () => {
     },
     newRoundBtn: {
       width: '100%',
-      background: 'linear-gradient(90deg, #9333ea 0%, #ec4899 50%, #f97316 100%)',
+      background: 'linear-gradient(90deg, #4b5563 0%, #374151 50%, #1f2937 100%)',
       color: 'white',
       border: 'none',
       padding: '16px',
@@ -295,13 +297,15 @@ const CardRevealGame = () => {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
         }
-        .card-item:hover { transform: scale(1.02); }
-        .card-item:active { transform: scale(0.98); }
+        .card-item:not(.card-revealed) { cursor: pointer; }
+        .card-item.card-revealed { cursor: default; opacity: 0.85; }
+        .card-item:not(.card-revealed):hover { transform: scale(1.02); }
+        .card-item:not(.card-revealed):active { transform: scale(0.98); }
         .card-animating { transform: scale(0.95) !important; }
-        .card-item:hover .card-glow { opacity: 0.75; }
-        .card-item:hover .card-content { border-color: #e5e7eb; }
-        .card-item:hover .number-badge { transform: rotate(6deg); }
-        .card-item:hover .reveal-icon-default { background: #f3e8ff; color: #9333ea; }
+        .card-item:not(.card-revealed):hover .card-glow { opacity: 0.75; }
+        .card-item:not(.card-revealed):hover .card-content { border-color: #e5e7eb; }
+        .card-item:not(.card-revealed):hover .number-badge { transform: rotate(6deg); }
+        .card-item:not(.card-revealed):hover .reveal-icon-default { background: #e5e7eb; color: #374151; }
         .new-round-btn:hover { transform: scale(1.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
         .new-round-btn:active { transform: scale(0.95); }
       `}</style>
@@ -313,9 +317,9 @@ const CardRevealGame = () => {
         <div style={styles.gameCard}>
           <div style={styles.header}>
             <div style={styles.titleWrapper}>
-              <Sparkles color="#fbbf24" size={32} />
-              <h1 style={styles.title}>Just Pick</h1>
-              <Sparkles color="#fbbf24" size={32} />
+              <Sparkles color="#6b7280" size={32} />
+              <h1 style={styles.title}>CARD REVEAL</h1>
+              <Sparkles color="#6b7280" size={32} />
             </div>
             <p style={styles.subtitle}>Click the cards to reveal the hidden words!</p>
           </div>
@@ -325,7 +329,7 @@ const CardRevealGame = () => {
               <div
                 key={index}
                 onClick={() => toggleReveal(index)}
-                className={`card-item ${animatingCard === index ? 'card-animating' : ''}`}
+                className={`card-item ${revealed[index] ? 'card-revealed' : ''} ${animatingCard === index ? 'card-animating' : ''}`}
                 style={styles.cardItem}
               >
                 <div className="card-glow" style={{...styles.cardGlow, background: cardGradients[index]}}></div>
@@ -363,7 +367,7 @@ const CardRevealGame = () => {
                         {revealed[index] ? <Eye size={24} /> : <EyeOff size={24} />}
                       </div>
                       <span style={styles.revealText}>
-                        {revealed[index] ? 'SHOWN' : 'TAP'}
+                        {revealed[index] ? 'SHOWN' : 'CLICK'}
                       </span>
                     </div>
                   </div>
