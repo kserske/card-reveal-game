@@ -307,6 +307,18 @@ const CardRevealGame = ({ setCurrentPage }) => {
       fontSize: '0.875rem',
       fontWeight: 700,
       color: '#4b5563'
+    },
+    credits: {
+      marginTop: '16px',
+      textAlign: 'center',
+      fontSize: '0.875rem',
+      color: '#6b7280'
+    },
+    creditsLink: {
+      color: '#374151',
+      textDecoration: 'none',
+      fontWeight: 700,
+      transition: 'color 0.3s ease'
     }
   };
 
@@ -332,6 +344,7 @@ const CardRevealGame = ({ setCurrentPage }) => {
         .card-item:not(.card-revealed):hover .reveal-icon-default { background: #e5e7eb; color: #374151; }
         .new-round-btn:hover, .switch-page-btn:hover { transform: scale(1.05); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
         .new-round-btn:active, .switch-page-btn:active { transform: scale(0.95); }
+        .credits-link:hover { color: #1f2937; }
       `}</style>
       
       <div style={styles.container}>
@@ -415,6 +428,9 @@ const CardRevealGame = ({ setCurrentPage }) => {
             <div style={styles.statsBadge}>
               <span>Revealed: {revealed.filter(r => r).length} / 5</span>
             </div>
+            <div style={styles.credits}>
+              Made by <a href="https://www.youtube.com/c/Kserske" target="_blank" rel="noopener noreferrer" className="credits-link" style={styles.creditsLink}>Gil</a>
+            </div>
           </div>
         </div>
       </div>
@@ -424,7 +440,6 @@ const CardRevealGame = ({ setCurrentPage }) => {
 
 const BigAssMessage = ({ setCurrentPage, setPreviewMessage }) => {
   const [message, setMessage] = useState('');
-  const [fontSize, setFontSize] = useState(200);
 
   const handlePreview = () => {
     setPreviewMessage(message);
@@ -470,7 +485,6 @@ const BigAssMessage = ({ setCurrentPage, setPreviewMessage }) => {
       padding: '30px',
       maxWidth: '600px',
       width: '100%',
-      marginBottom: '40px',
       zIndex: 1
     },
     title: {
@@ -500,35 +514,7 @@ const BigAssMessage = ({ setCurrentPage, setPreviewMessage }) => {
       borderRadius: '12px',
       resize: 'vertical',
       fontFamily: 'inherit',
-      minHeight: '100px'
-    },
-    slider: {
-      width: '100%',
-      height: '8px',
-      borderRadius: '4px',
-      outline: 'none',
-      WebkitAppearance: 'none',
-      background: '#e5e7eb',
-      cursor: 'pointer'
-    },
-    displayArea: {
-      flex: 1,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '100%',
-      padding: '40px',
-      textAlign: 'center'
-    },
-    bigText: {
-      fontSize: `${fontSize}px`,
-      fontWeight: 900,
-      color: 'white',
-      wordBreak: 'break-word',
-      lineHeight: 1.2,
-      textShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
-      maxWidth: '100%',
-      textTransform: 'uppercase'
+      minHeight: '150px'
     },
     previewButton: {
       width: '100%',
@@ -545,8 +531,7 @@ const BigAssMessage = ({ setCurrentPage, setPreviewMessage }) => {
       justifyContent: 'center',
       gap: '12px',
       boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
-      transition: 'all 0.3s ease',
-      marginTop: '12px'
+      transition: 'all 0.3s ease'
     }
   };
 
@@ -557,23 +542,6 @@ const BigAssMessage = ({ setCurrentPage, setPreviewMessage }) => {
         .back-button:active { transform: scale(0.95); }
         .preview-button:hover { transform: scale(1.05); }
         .preview-button:active { transform: scale(0.95); }
-        input[type="range"]::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: #4b5563;
-          cursor: pointer;
-        }
-        input[type="range"]::-moz-range-thumb {
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: #4b5563;
-          cursor: pointer;
-          border: none;
-        }
       `}</style>
       
       <div style={styles.container}>
@@ -599,18 +567,6 @@ const BigAssMessage = ({ setCurrentPage, setPreviewMessage }) => {
             />
           </div>
 
-          <div style={styles.inputGroup}>
-            <label style={styles.label}>Font Size: {fontSize}px</label>
-            <input
-              type="range"
-              min="50"
-              max="400"
-              value={fontSize}
-              onChange={(e) => setFontSize(e.target.value)}
-              style={styles.slider}
-            />
-          </div>
-
           <button 
             onClick={handlePreview} 
             className="preview-button"
@@ -620,12 +576,6 @@ const BigAssMessage = ({ setCurrentPage, setPreviewMessage }) => {
             <MessageSquare size={24} />
             FULLSCREEN PREVIEW
           </button>
-        </div>
-
-        <div style={styles.displayArea}>
-          <div style={styles.bigText}>
-            {message || 'Type something...'}
-          </div>
         </div>
       </div>
     </>
