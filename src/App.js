@@ -441,6 +441,12 @@ const CardRevealGame = ({ setCurrentPage }) => {
 const BigAssMessage = ({ setCurrentPage, setPreviewMessage }) => {
   const [message, setMessage] = useState('');
 
+  const handleMessageChange = (e) => {
+    // Remove all spaces from the input
+    const newValue = e.target.value.replace(/\s/g, '');
+    setMessage(newValue);
+  };
+
   const handlePreview = () => {
     setPreviewMessage(message);
     setCurrentPage('preview');
@@ -558,11 +564,11 @@ const BigAssMessage = ({ setCurrentPage, setPreviewMessage }) => {
           <h1 style={styles.title}>BIG ASS MESSAGE</h1>
           
           <div style={styles.inputGroup}>
-            <label style={styles.label}>Your Message:</label>
+            <label style={styles.label}>Your Word:</label>
             <textarea
               value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Type your message here..."
+              onChange={handleMessageChange}
+              placeholder="Type your word here... (no spaces allowed)"
               style={styles.textarea}
             />
           </div>
