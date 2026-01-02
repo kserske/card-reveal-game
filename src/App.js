@@ -527,7 +527,8 @@ const BigAssMessage = ({ setCurrentPage, setPreviewMessage }) => {
       wordBreak: 'break-word',
       lineHeight: 1.2,
       textShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
-      maxWidth: '100%'
+      maxWidth: '100%',
+      textTransform: 'uppercase'
     },
     previewButton: {
       width: '100%',
@@ -637,21 +638,33 @@ const MessagePreview = ({ setCurrentPage, message }) => {
   const [calculatedFontSize, setCalculatedFontSize] = React.useState(100);
 
   React.useEffect(() => {
+    // Enter fullscreen when component mounts
+    const enterFullscreen = async () => {
+      try {
+        if (containerRef.current && containerRef.current.requestFullscreen) {
+          await containerRef.current.requestFullscreen();
+        } else if (containerRef.current && containerRef.current.webkitRequestFullscreen) {
+          await containerRef.current.webkitRequestFullscreen();
+        }
+      } catch (err) {
+        console.log('Fullscreen not supported or denied');
+      }
+    };
+
+    enterFullscreen();
+
     const calculateFontSize = () => {
       if (!textRef.current || !containerRef.current) return;
 
       const container = containerRef.current;
       const text = textRef.current;
       
-      // Get container dimensions with padding
       const containerWidth = container.clientWidth * 0.9;
       const containerHeight = container.clientHeight * 0.9;
       
-      // Start with a large font size
       let fontSize = 500;
       text.style.fontSize = `${fontSize}px`;
       
-      // Decrease font size until text fits
       while ((text.scrollWidth > containerWidth || text.scrollHeight > containerHeight) && fontSize > 10) {
         fontSize -= 5;
         text.style.fontSize = `${fontSize}px`;
@@ -663,8 +676,30 @@ const MessagePreview = ({ setCurrentPage, message }) => {
     calculateFontSize();
     window.addEventListener('resize', calculateFontSize);
     
-    return () => window.removeEventListener('resize', calculateFontSize);
+    return () => {
+      window.removeEventListener('resize', calculateFontSize);
+      // Exit fullscreen when component unmounts
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      }
+    };
   }, [message]);
+
+  const handleClick = () => {
+    // Exit fullscreen and go back
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+    }
+    setCurrentPage('message');
+  };
 
   const styles = {
     container: {
@@ -677,27 +712,8 @@ const MessagePreview = ({ setCurrentPage, message }) => {
       padding: '20px',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       position: 'relative',
-      overflow: 'hidden'
-    },
-    backButton: {
-      position: 'fixed',
-      top: '20px',
-      left: '20px',
-      background: 'rgba(255, 255, 255, 0.15)',
-      backdropFilter: 'blur(10px)',
-      border: '2px solid rgba(255, 255, 255, 0.3)',
-      padding: '12px 24px',
-      borderRadius: '12px',
-      fontSize: '1rem',
-      fontWeight: 700,
-      cursor: 'pointer',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '8px',
-      color: 'white',
-      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.3)',
-      transition: 'all 0.3s ease',
-      zIndex: 10
+      overflow: 'hidden',
+      cursor: 'pointer'
     },
     textContainer: {
       width: '100%',
@@ -715,29 +731,25 @@ const MessagePreview = ({ setCurrentPage, message }) => {
       textShadow: '0 4px 30px rgba(255, 255, 255, 0.3)',
       maxWidth: '100%',
       maxHeight: '100%',
-      whiteSpace: 'pre-wrap'
+      whiteSpace: 'pre-wrap',
+      textTransform: 'uppercase'
     }
   };
 
   return (
     <>
       <style>{`
-        .preview-back-button:hover { 
-          background: rgba(255, 255, 255, 0.25);
-          transform: scale(1.05); 
+        .preview-container:hover {
+          background: #0a0a0a;
         }
-        .preview-back-button:active { transform: scale(0.95); }
       `}</style>
       
-      <div style={styles.container} ref={containerRef}>
-        <button 
-          onClick={() => setCurrentPage('message')} 
-          className="preview-back-button"
-          style={styles.backButton}
-        >
-          ← BACK
-        </button>
-
+      <div 
+        style={styles.container} 
+        ref={containerRef} 
+        onClick={handleClick}
+        className="preview-container"
+      >
         <div style={styles.textContainer}>
           <div 
             ref={textRef}
